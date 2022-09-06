@@ -1,9 +1,11 @@
+import Header from 'components/Header';
+
 import './app.css';
 
 function App() {
   return (
-    <div className="app">
-      <header className="app-header">Welcome to the Web Search Console</header>
+    <div className="app" data-testid="App">
+      <Header />
     </div>
   );
 }
