@@ -20,5 +20,6 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'no-duplicate-imports': 'error',
     quotes: [2, 'single'],
+    'eol-last': 1,
   },
 };
