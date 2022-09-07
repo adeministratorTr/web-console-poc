@@ -5,10 +5,9 @@ import App from './App';
 
 test('renders learn react link', () => {
   render(
-    // @TODO: Update test when there is new/valid store
-    // <Provider store={store}>
-    <App />
-    // </Provider>
+    <Provider store={store}>
+      <App />
+    </Provider>
   );
 
   expect(screen.getByTestId('App')).toBeVisible();
