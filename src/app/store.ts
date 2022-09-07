@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 
+import cloudsReducer from 'reducers/clouds';
+
 export const store = configureStore({
   reducer: {
-    // @TODO: add new reducer
-  },
+    clouds: cloudsReducer
+  }
 });
 
 export type AppDispatch = typeof store.dispatch;
