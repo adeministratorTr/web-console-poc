@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from 'app/hooks';
 import { fetchClouds } from 'reducers/clouds';
 import Loading from 'components/Loading';
+import { getDistanceFromLocations, TLocation } from 'utils/location';
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -10,7 +11,23 @@ export default function Home() {
 
   useEffect(() => {
     dispatch(fetchClouds());
+    // navigator.geolocation.getCurrentPosition(locationSuccess); // @TODO: add error cb
   }, []);
+
+  function locationSuccess(userLocation: GeolocationPosition) {
+    const { latitude, longitude } = userLocation.coords;
+    const location1: TLocation = {
+      longitude,
+      latitude
+    };
+
+    const location2: TLocation = {
+      longitude: 18.42,
+      latitude: -33.92
+    };
+    // @TODO remove console
+    console.log('distance: ', getDistanceFromLocations({ location1, location2 }));
+  }
 
   return (
     <div data-testid="Home">
