@@ -36,7 +36,6 @@ export const clouds = createSlice({
       })
       .addCase(fetchClouds.fulfilled, (state, action) => {
         state.status = 'success';
-        console.log('action.payload:', action.payload);
         state.clouds = action.payload;
       })
       .addCase(fetchClouds.rejected, (state, action) => {
