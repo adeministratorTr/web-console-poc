@@ -11,11 +11,13 @@ export type TCloud = {
 
 export type TCloudPlatforms = {
   clouds: TCloud[];
-  error?: {
-    message: string;
-    more_info: string;
-    status: number;
-  };
+  errors?: [
+    {
+      message: string;
+      more_info?: string;
+      status?: number;
+    }
+  ];
   message?: string;
 };
 
@@ -23,7 +25,8 @@ export async function getCloudPlatforms(): Promise<TCloudPlatforms> {
   try {
     const response: TCloudPlatforms = await fetch(`${API_URL}/${API_VERSION}/clouds`)
       .then((result) => result.json())
-      .then((resp) => resp);
+      .then((resp) => resp)
+      .catch((err) => err);
 
     return response;
   } catch (e) {
