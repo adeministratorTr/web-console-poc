@@ -3,7 +3,10 @@ import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from 'app/hooks';
 import { fetchClouds, setRegion, setProvider } from 'reducers/clouds';
 import Loading from 'components/Loading';
-import { CLOUD_PROVIDER_LIST } from 'reducers/constants/cloud';
+import CloudProvider from './components/CloudProvider';
+import { TCloudProviderValues } from 'reducers/constants/cloud';
+
+import styles from './Home.module.scss';
 
 export default function Home() {
   const dispatch = useAppDispatch();
@@ -31,11 +34,11 @@ export default function Home() {
     ));
 
   const renderListRegions = () => (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
+    <div className={styles.regionContainer} data-testid="HomeRegionList">
       {initialCloudState.regions.map((region, index) => (
         <p
+          className={styles.regionItem}
           key={index}
-          style={{ textTransform: 'capitalize', marginRight: 15 }}
           onClick={() => dispatch(setRegion(region))}
         >
           {region}
@@ -52,14 +55,10 @@ export default function Home() {
       {initialCloudState.status === 'fail' && (
         <p data-testid="Error">Ooops. Something went wrong</p>
       )}
-      <p>Cloud Providers</p>
-      <div>
-        {CLOUD_PROVIDER_LIST.map((provider) => (
-          <div key={provider.id} onClick={() => dispatch(setProvider(provider.value))}>
-            {provider.text}
-          </div>
-        ))}
-      </div>
+      <p>Cloud Providers:</p>
+      <CloudProvider
+        onSelect={(value: TCloudProviderValues) => dispatch(setProvider(value))}
+      />
       {initialCloudState.status === 'success' && initialCloudState.clouds.length > 0 && (
         <>
           <p data-testid="List">{initialCloudState.clouds[0].cloud_description}</p>
