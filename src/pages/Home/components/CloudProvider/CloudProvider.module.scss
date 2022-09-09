@@ -1,0 +1,19 @@
+@import 'src/styles/variables';
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item {
+  margin: 0 5px;
+  padding: 10px;
+  border: 1px solid $color-red-primary;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:active {
+    background-color: $color-red-primary;
+  }
+}
