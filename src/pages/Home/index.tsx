@@ -19,6 +19,14 @@ export default function Home() {
     // navigator.geolocation.getCurrentPosition(locationPermissionOnSuccess);
   }, []);
 
+  function shouldHideCloudProviders(): boolean {
+    return (
+      initialCloudState.selectedClouds.list.length === 0 &&
+      initialCloudState.selectedClouds.cloudProvider.length !== 0 &&
+      initialCloudState.selectedClouds.region.length !== 0
+    );
+  }
+
   // function locationPermissionOnSuccess(userLocation: GeolocationPosition) {
   //   dispatch(
   //     setLocation({
@@ -61,17 +69,21 @@ export default function Home() {
           <NoResult />
         </p>
       )}
-      <p className={styles.textCapitalize}>
-        Cloud Providers:{' '}
-        {
-          cloudProviderMapper[
-            initialCloudState.selectedClouds.cloudProvider as TCloudProviderValues
-          ]
-        }
-      </p>
-      <CloudProvider
-        onSelect={(value: TCloudProviderValues) => dispatch(setProvider(value))}
-      />
+      {initialCloudState.status === 'success' && (
+        <>
+          <p className={styles.textCapitalize} data-testid="HomeCloudProviders">
+            Cloud Providers:{' '}
+            {
+              cloudProviderMapper[
+                initialCloudState.selectedClouds.cloudProvider as TCloudProviderValues
+              ]
+            }
+          </p>
+          <CloudProvider
+            onSelect={(value: TCloudProviderValues) => dispatch(setProvider(value))}
+          />
+        </>
+      )}
       {initialCloudState.status === 'success' && initialCloudState.clouds.length > 0 && (
         <>
           {/* {(userLocation.latitude === 0 || userLocation.longitude === 0) && (
@@ -79,13 +91,13 @@ export default function Home() {
               Please let us know your location to list closest Cloud Providers to you!
             </p>
           )} */}
-          <p className={styles.textCapitalize}>
+          <p className={styles.textCapitalize} data-testid="HomeRegions">
             Regions: {initialCloudState.selectedClouds.region}
           </p>
           {initialCloudState.regions.length > 0 && renderListRegions()}
-          {initialCloudState.selectedClouds.list.length === 0 &&
-            initialCloudState.selectedClouds.cloudProvider.length !== 0 &&
-            initialCloudState.selectedClouds.region.length !== 0 && <NoResult />}
+
+          {shouldHideCloudProviders() && <NoResult />}
+
           {initialCloudState.selectedClouds.list.length > 0 &&
             renderSelectedRegionClouds()}
         </>
