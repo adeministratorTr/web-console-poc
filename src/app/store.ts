@@ -1,10 +1,12 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 
 import cloudsReducer from 'reducers/clouds';
+import userReducer from 'reducers/user';
 
 export const store = configureStore({
   reducer: {
-    clouds: cloudsReducer
+    clouds: cloudsReducer,
+    user: userReducer
   }
 });
 
