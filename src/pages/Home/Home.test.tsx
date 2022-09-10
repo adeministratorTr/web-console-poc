@@ -55,6 +55,24 @@ describe('pages/Home', () => {
     expect(screen.queryByTestId('Error')).not.toBeInTheDocument();
   });
 
+  it('should render no result when response has no data', async () => {
+    render(
+      <Provider store={store}>
+        <Home />
+      </Provider>
+    );
+    store.dispatch({ type: fetchClouds.fulfilled.toString(), payload: [] });
+
+    // user should see Loading component until action dispatched
+    expect(screen.getByTestId('Loading')).toBeVisible();
+
+    // when action dispatched successfully, user should not see any Loading component,
+    await waitForElementToBeRemoved(screen.getByTestId('Loading'));
+    expect(screen.getByTestId('Home')).toBeVisible();
+    expect(screen.queryByTestId('List')).toBeNull();
+    expect(screen.queryByTestId('HomeRegions')).toBeNull();
+  });
+
   it('should set selected cloud provider', async () => {
     render(
       <Provider store={store}>
