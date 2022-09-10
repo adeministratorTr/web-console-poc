@@ -61,7 +61,7 @@ export const clouds = createSlice({
       const uniqueRegions = new Set([...regions]);
       state.regions = Array.from(uniqueRegions);
     },
-    setRegion: (state, action) => {
+    setRegion: (state, action: PayloadAction<string>) => {
       state.selectedClouds.region = action.payload;
       clouds.caseReducers.getSelectedClouds(state);
     },
