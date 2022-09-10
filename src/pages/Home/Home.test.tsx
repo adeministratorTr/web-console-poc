@@ -42,10 +42,8 @@ describe('pages/Home', () => {
     expect(screen.getByTestId('Loading')).toBeVisible();
 
     // when action dispatched successfully, user should not see any Loading component,
-    // and should see the List
     await waitForElementToBeRemoved(screen.getByTestId('Loading'));
     expect(screen.getByTestId('Home')).toBeVisible();
     expect(screen.queryByTestId('Error')).not.toBeInTheDocument();
-    expect(screen.getByTestId('List')).toBeVisible();
   });
 });

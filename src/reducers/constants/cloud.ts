@@ -12,7 +12,7 @@ type TCloudProviders =
   | 'DigitalOcean'
   | 'UpCloud';
 
-const cloudProviderMapper: Record<TCloudProviderValues, TCloudProviders> = {
+export const cloudProviderMapper: Record<TCloudProviderValues, TCloudProviders> = {
   azure: 'Azure',
   aws: 'Amazon Web Services',
   google: 'Google Cloud',
