@@ -1,8 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { getCloudPlatforms, TCloudPlatforms, TCloud } from 'services/clouds';
 import { TCloudProviderValues } from 'reducers/constants/cloud';
+import { getDistanceFromLocations, TLocation } from 'utils/location';
 
 // Action
+// Wonder why there is no test for this action? Here is why:
+// https://redux.js.org/usage/writing-tests#action-creators--thunks
 export const fetchClouds = createAsyncThunk(
   'clouds/fetch',
   async (_, { rejectWithValue }) => {
@@ -26,6 +29,7 @@ export const fetchClouds = createAsyncThunk(
 export type TCloudState = TCloudPlatforms & {
   status: 'loading' | 'success' | 'fail';
   regions: string[];
+  userLocation: TLocation;
   selectedClouds: {
     cloudProvider: TCloudProviderValues | '';
     region: string;
@@ -35,6 +39,10 @@ export type TCloudState = TCloudPlatforms & {
 
 export const initialState: TCloudState = {
   status: 'loading',
+  userLocation: {
+    latitude: 0,
+    longitude: 0
+  },
   regions: [],
   selectedClouds: {
     cloudProvider: '',
@@ -77,6 +85,33 @@ export const clouds = createSlice({
             cloud.cloud_name.includes(state.selectedClouds.cloudProvider)
           );
       }
+      if (state.userLocation.latitude !== 0 || state.userLocation.longitude !== 0) {
+        state.selectedClouds.list.sort((item1, item2) => {
+          const compareOject1: TLocation = {
+            latitude: item1.geo_latitude,
+            longitude: item1.geo_longitude
+          };
+          const compareOject2: TLocation = {
+            latitude: item2.geo_latitude,
+            longitude: item2.geo_longitude
+          };
+
+          return (
+            getDistanceFromLocations({
+              location1: compareOject1,
+              location2: state.userLocation
+            }) -
+            getDistanceFromLocations({
+              location1: compareOject2,
+              location2: state.userLocation
+            })
+          );
+        });
+      }
+    },
+    setUserLocation: (state, action: PayloadAction<TLocation>) => {
+      state.userLocation.latitude = action.payload.latitude;
+      state.userLocation.longitude = action.payload.longitude;
     }
   },
   extraReducers: (builder) => {
@@ -104,6 +139,7 @@ export const clouds = createSlice({
   }
 });
 
-export const { getSelectedClouds, setRegion, setProvider } = clouds.actions;
+export const { getSelectedClouds, setRegion, setProvider, setUserLocation } =
+  clouds.actions;
 
 export default clouds.reducer;

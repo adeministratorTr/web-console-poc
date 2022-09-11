@@ -1,3 +1,4 @@
+import { TLocation } from 'utils/location';
 import { createMockStore } from 'utils/testUtils';
 import cloudsReducer, {
   fetchClouds,
@@ -5,6 +6,7 @@ import cloudsReducer, {
   initialState,
   setProvider,
   setRegion,
+  setUserLocation,
   TCloudState
 } from './clouds';
 
@@ -28,6 +30,13 @@ const sampleClouds = [
     cloud_name: 'aws-eu-west-1',
     geo_latitude: -50,
     geo_longitude: -100,
+    geo_region: 'europe'
+  },
+  {
+    cloud_description: 'Europe, UK - Amazon Web Services: London',
+    cloud_name: 'aws-eu-west-2',
+    geo_latitude: -10,
+    geo_longitude: -10,
     geo_region: 'europe'
   }
 ];
@@ -155,22 +164,30 @@ describe('reducers/clouds', () => {
           list: []
         }
       };
-      const expectedState = [
-        {
-          cloud_description: 'Europe, Ireland - Amazon Web Services: Ireland',
-          cloud_name: 'aws-eu-west-1',
-          geo_latitude: -50,
-          geo_longitude: -100,
-          geo_region: 'europe'
-        }
-      ];
 
       expect(
         cloudsReducer(updatedState, getSelectedClouds()).selectedClouds.list.length
-      ).toBe(1);
+      ).toBe(2);
       expect(
         cloudsReducer(updatedState, getSelectedClouds()).selectedClouds.list
-      ).toEqual(expectedState);
+      ).toEqual([sampleClouds[2], sampleClouds[3]]);
+    });
+
+    it('should set user location info and list by distance', () => {
+      const sampleLocation: TLocation = {
+        latitude: 10,
+        longitude: -10
+      };
+
+      store.dispatch({ type: fetchClouds.fulfilled, payload: sampleClouds });
+      store.dispatch({ type: setUserLocation.toString(), payload: sampleLocation });
+      store.dispatch({ type: setProvider.toString(), payload: 'aws' });
+      store.dispatch({ type: setRegion.toString(), payload: 'europe' });
+
+      expect(store.getState().clouds.selectedClouds.list).toEqual([
+        sampleClouds[3],
+        sampleClouds[2]
+      ]);
     });
   });
 });
