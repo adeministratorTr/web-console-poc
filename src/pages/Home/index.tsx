@@ -40,9 +40,10 @@ export default function Home() {
   const renderSelectedRegionClouds = () => (
     <div data-testid="HomeCloudList">
       {initialCloudState.selectedClouds.list.map((cloud, index) => (
-        <p key={index} data-testid="HomeCloudItem">
-          {cloud.cloud_name}
-        </p>
+        <div key={index} className={styles.cloudItem} data-testid="HomeCloudItem">
+          <p>{cloud.cloud_name}</p>
+          <p>Location: {cloud.cloud_description}</p>
+        </div>
       ))}
     </div>
   );
