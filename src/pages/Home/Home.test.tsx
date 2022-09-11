@@ -148,10 +148,10 @@ describe('pages/Home', () => {
     fireEvent.click(screen.getByText('africa'));
     store.dispatch({ type: setUserLocation.toString(), payload: sampleUserCoordinates });
 
-    expect(screen.getAllByTestId('HomeCloudItem')[0].textContent).toBe(
+    expect(screen.getAllByTestId('HomeCloudItem')[0]).toHaveTextContent(
       sampleClouds[2].cloud_name
     );
-    expect(screen.getAllByTestId('HomeCloudItem')[1].textContent).toBe(
+    expect(screen.getAllByTestId('HomeCloudItem')[1]).toHaveTextContent(
       sampleClouds[1].cloud_name
     );
   });

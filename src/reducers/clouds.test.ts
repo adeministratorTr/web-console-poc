@@ -49,7 +49,6 @@ const {
 beforeEach(() => clearActionHistory());
 afterAll(() => clearActionHistory());
 
-// @TODO check console errors
 describe('reducers/clouds', () => {
   describe('api calls', () => {
     it('should return the initial state by default', () => {
